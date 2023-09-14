@@ -35,14 +35,22 @@ const resolvers = {
       return { token, user };
     },
     saveBook: async (parent, args, context) => {
-      if (context.book) {
-        return User.findOneAndUpdate({ _id: context.book._id });
+      if (context.user) {
+        return User.findOneAndUpdate(
+          {
+            $addToSet: { savedBooks: context.book._id },
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
       }
       throw AuthenticationError;
     },
     removeBook: async (parent, args, context) => {
       if (context.book) {
-        return Book.findOneAndDelete({ _id: context.book._id });
+        return User.findOneAndDelete({ _id: context.book._id });
       }
       throw AuthenticationError;
     },
