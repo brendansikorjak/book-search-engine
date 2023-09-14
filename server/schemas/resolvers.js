@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Book } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -34,9 +34,15 @@ const resolvers = {
 
       return { token, user };
     },
+    saveBook: async (parent, args, context) => {
+      if (context.book) {
+        return User.findOneAndUpdate({ _id: context.book._id });
+      }
+      throw AuthenticationError;
+    },
     removeBook: async (parent, args, context) => {
       if (context.book) {
-        return User.findOneAndDelete({ _id: context.book._id });
+        return Book.findOneAndDelete({ _id: context.book._id });
       }
       throw AuthenticationError;
     },
