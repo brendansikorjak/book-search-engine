@@ -4,7 +4,6 @@ const { expressMiddleware } = require('@apollo/server/express4');
 const { authMiddleware } = require('./utils/auth');
 const path = require('path');
 const db = require('./config/connection');
-const routes = require('./routes');
 
 const { typeDefs, resolvers } = require('./schemas');
 
@@ -32,8 +31,6 @@ const startApolloServer = async () => {
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/build')));
   }
-
-  app.use(routes);
 
   db.once('open', () => {
     app.listen(PORT, () => {
